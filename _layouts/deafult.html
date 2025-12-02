@@ -15,31 +15,35 @@
             line-height: 1.6;
             margin: 0;
             display: flex;
-            flex-direction: column; /* Stacks header and content vertically */
+            flex-direction: column;
             min-height: 100vh;
         }
 
         /* Top Header Styling */
         .header {
             width: 100%;
-            background-color: #f8f9fa;
+            background-color: #fff; /* Changed to white for a cleaner look with the sidebar */
             border-bottom: 1px solid #eaeaea;
             padding: 20px 50px;
             display: flex;
-            justify-content: space-between; /* Pushes Title to left, Links to right */
+            justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1000; /* Keeps header on top */
         }
 
         .header h2 {
             font-family: 'Merriweather', serif;
             font-size: 1.4rem;
             margin: 0;
+            color: #111;
         }
 
         .nav-links {
             display: flex;
-            gap: 30px; /* Space between the links */
+            gap: 30px;
         }
 
         .nav-links a {
@@ -51,13 +55,48 @@
         }
         .nav-links a:hover { color: #000; text-decoration: underline; }
 
-        /* Content Styling */
-        .content {
-            padding: 60px 50px;
-            max-width: 900px;
+        /* Main Page Container (Sidebar + Content) */
+        .page-container {
+            display: flex;
+            max-width: 1100px;
             width: 100%;
-            margin: 0 auto; /* Centers the content block */
+            margin: 0 auto;
+            padding: 60px 40px;
+            gap: 60px; /* Space between sidebar and text */
             box-sizing: border-box;
+        }
+
+        /* Profile Sidebar (The "Side Line") */
+        .profile-sidebar {
+            flex: 0 0 280px; /* Fixed width for the sidebar */
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%; /* Makes the image a circle */
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 1px solid #eaeaea;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .profile-info h3 {
+            margin: 10px 0 5px 0;
+            font-size: 1.2rem;
+        }
+        
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1; /* Takes up the remaining space */
+            min-width: 0; /* Prevents overflow issues */
         }
 
         h1, h2, h3 { font-family: 'Merriweather', serif; color: #111; margin-top: 2rem; }
@@ -78,14 +117,24 @@
             .header {
                 flex-direction: column;
                 text-align: center;
-                padding: 20px;
+                padding: 15px;
                 gap: 15px;
             }
             .nav-links {
                 flex-direction: column;
                 gap: 10px;
             }
-            .content { padding: 30px 20px; }
+            .page-container {
+                flex-direction: column; /* Stacks sidebar on top of content */
+                padding: 30px 20px;
+                gap: 40px;
+            }
+            .profile-sidebar {
+                flex: auto;
+                width: 100%;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 30px;
+            }
         }
     </style>
 </head>
@@ -96,14 +145,37 @@
         <h2>{{ site.title }}</h2>
         <div class="nav-links">
             <a href="{{ site.baseurl }}/">Home</a>
-            <a href="#projects">Projects</a>
+            <a href="#publications">Publications</a>
+            <a href="{{ site.baseurl }}/cv.pdf" target="_blank">CV</a>
             <a href="#activities">Activities</a>
-            <a href="{{ site.baseurl }}/cv.pdf" target="_blank">CV (PDF)</a>
         </div>
     </div>
 
-    <div class="content">
-        {{ content }}
+    <!-- Split Layout Container -->
+    <div class="page-container">
+        
+        <!-- Left Sidebar -->
+        <div class="profile-sidebar">
+            <!-- Ensure you upload an image named profile.jpg to your repo -->
+            <img src="{{ site.baseurl }}/profile.jpg" alt="Profile Picture" class="profile-img" onerror="this.src='https://via.placeholder.com/200?text=Photo';">
+            
+            <div class="profile-info">
+                <!-- You can hardcode your info here so it shows on every page -->
+                <h3>{{ site.title }}</h3>
+                <p>PhD Candidate / Professor</p>
+                <p>University Name</p>
+                <br>
+                <p style="font-size: 0.9rem;">
+                    <a href="mailto:your.email@university.edu">your.email@university.edu</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Main Content -->
+        <div class="main-content">
+            {{ content }}
+        </div>
+        
     </div>
 
 </body>
